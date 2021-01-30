@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <fstream>
 
 using namespace std;
 
@@ -22,18 +23,20 @@ class Item{
 };
 
 int main(void){
-    // Current knapsack, current list of all items, matrix of items picked per test case.
-    vector<Item> K, I;
+    // Vector of generated knapsacks.
     vector<vector<Item>> R;
     // Capacity, Number of Objects, Value, Weight, Total Acquired Weight.
     int c, n, v, w;
     int t_w = 0;
-    
+    ifstream in("sample_in.in");
+    cin.rdbuf(in.rdbuf());
+
+
     // Reading from Kattis.
-    long long a, b;    
-    while (cin >> a >> b) {
+    while (cin >> c) {
+        // Current knapsack, current list of all items.
+        vector<Item> K, I;
         // Read meta.
-        cin >> c;
         cin >> n;
         // Read items.
         for(int i=0; i < n; i++){
@@ -51,18 +54,20 @@ int main(void){
             if(t_w + I[i].getWeight() < c){ K.push_back(I[i]); t_w += I[i].getWeight(); } // Add if we're not.
         }
 
-        // Append the current knapsack to the knapsack matrix.
+        // Append the current knapsack to the knapsack matrix and reset the total weight.
         R.push_back(K);
+        t_w = 0;
     }
 
     // Print number of picked objects.
     for(int i=0; i < R.size(); i++)
-        cout << R[i].size();
+        cout << R[i].size() << endl;
     
     // Print the picked objects.
     for(int i=0; i < R.size(); i++){
         for(int j=0; j < R[i].size(); j++)
-            cout << R[i][j].getIndex();
+            cout << R[i][j].getIndex() << " ";
+        cout << endl;
     }
 
     // Terminate the program.
